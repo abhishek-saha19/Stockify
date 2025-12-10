@@ -71,18 +71,24 @@ export default function DiscoverPage() {
         <div className="flex h-full flex-col items-center justify-center p-4 relative overflow-hidden">
             {!isFinished ? (
                 <div className="relative w-full max-w-sm h-full flex items-center justify-center">
-                    {/* Render current card */}
+                    {/* Render NEXT card in background (Bottom of stack) */}
+                    {currentIndex + 1 < stockQueue.length && (
+                        <div className="absolute left-0 right-0 top-0 bottom-0 m-auto w-full max-w-sm flex items-center justify-center -z-10 scale-95 opacity-50">
+                            {/* Render actual card content but static */}
+                            <SwipeableCard
+                                key={stockQueue[currentIndex + 1].id}
+                                stock={stockQueue[currentIndex + 1]}
+                                onSwipe={() => { }} // No-op
+                            />
+                        </div>
+                    )}
+
+                    {/* Render CURRENT card (Top of stack) */}
                     <SwipeableCard
                         key={stockQueue[currentIndex].id}
                         stock={stockQueue[currentIndex]}
                         onSwipe={handleSwipe}
                     />
-                    {/* Render next card in background for better UX (optional, simplistic here) */}
-                    {currentIndex + 1 < stockQueue.length && (
-                        <div className="absolute left-0 right-0 top-0 bottom-0 m-auto w-full max-w-sm flex items-center justify-center -z-10">
-                            <div className="w-full h-[calc(100vh-180px)] md:h-[calc(100vh-140px)] bg-card border rounded-xl shadow-lg scale-95 opacity-50"></div>
-                        </div>
-                    )}
                 </div>
             ) : (
                 <div className="text-center space-y-4">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform, useAnimation } from "framer-motion";
 import { Stock } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,9 +12,10 @@ import { cn } from "@/lib/utils";
 interface SwipeableCardProps {
     stock: Stock;
     onSwipe: (direction: "left" | "right") => void;
+    interactive?: boolean;
 }
 
-export function SwipeableCard({ stock, onSwipe }: SwipeableCardProps) {
+export function SwipeableCard({ stock, onSwipe, interactive = true }: SwipeableCardProps) {
     const controls = useAnimation();
     const x = useMotionValue(0);
     const rotate = useTransform(x, [-100, 0, 100], [-10, 0, 10]);
@@ -49,15 +51,17 @@ export function SwipeableCard({ stock, onSwipe }: SwipeableCardProps) {
 
     const isPositive = stock.changePercent >= 0;
 
+    useEffect(() => {
+        controls.start({ x: 0, scale: 1, opacity: 1, transition: { duration: 0.3 } });
+    }, [controls, stock]); // Run when stock changes/mounts
+
     return (
         <motion.div
-            drag="x"
+            drag={interactive ? "x" : false}
             dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={handleDragEnd}
+            onDragEnd={interactive ? handleDragEnd : undefined}
             animate={controls}
-            initial={{ scale: 0.95, opacity: 0.5 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
+            initial={{ scale: 0.95, opacity: 0, x: 0 }}
             style={{ x, rotate, opacity }}
             className="absolute left-0 right-0 top-0 bottom-0 m-auto w-full max-w-sm h-[calc(100vh-180px)] md:h-[calc(100vh-140px)] cursor-grab active:cursor-grabbing"
         >
