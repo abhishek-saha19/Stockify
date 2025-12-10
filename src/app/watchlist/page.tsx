@@ -24,19 +24,18 @@ export default function WatchlistPage() {
             const data = await WatchlistService.getWatchlist(user.uid);
 
             // Fetch real prices for each stock in the watchlist
-            // Finnhub Free Tier Limit ~60 calls/min. Watchlist usually < 10 items.
+            // Twelve Data Free Limit ~8 calls/min. Watchlist usually < 8 items.
             // We fetch in parallel but might need to be careful.
             const updatedDataPromises = data.map(async (stock) => {
-                let querySymbol = stock.symbol;
-                // Generalize mapping: If exchange is NSE and doesn't already have extension
-                if (stock.exchange === "NSE" && !querySymbol.endsWith(".NS")) {
-                    querySymbol = `${stock.symbol}.NS`;
-                }
+                // Twelve Data works best with pure symbols + exchange param
+                // so we don't need to append .NS anymore
+                const querySymbol = stock.symbol;
 
                 // Fallback to mock if API fails
                 try {
                     const { fetchStockPrice } = await import("@/lib/api");
-                    const realData = await fetchStockPrice(querySymbol);
+                    // Pass exchange (default to NSE if missing)
+                    const realData = await fetchStockPrice(querySymbol, stock.exchange || "NSE");
                     if (realData) {
                         return {
                             ...stock,

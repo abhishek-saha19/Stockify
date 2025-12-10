@@ -22,19 +22,12 @@ export default function StockDetailsPage() {
     useEffect(() => {
         const getRealData = async () => {
             if (!stock) return;
-            // Map common Indian stocks to US symbols for demo purposes if needed, 
-            // or try direct NSE symbols if Finnhub supports them on your plan.
-            // For free tier reliability, let's map a few for the Resume Demo:
-            let querySymbol = stock.symbol;
-            if (stock.symbol === "RELIANCE") querySymbol = "RELIANCE.NS";
-            if (stock.symbol === "TCS") querySymbol = "TCS.NS";
-            // ... add more mappings or just pass stock.symbol
 
-            // NOTE: Finnhub Free Tier often lacks NSE data. 
-            // FALLBACK: If you want to impress, use "AAPL" for technology stocks just to show it works, 
-            // or stick to the mocking if the API returns 0.
+            // Twelve Data API: Use direct symbol and exchange
+            const querySymbol = stock.symbol;
+            const exchange = stock.exchange || "NSE";
 
-            const realData = await fetchStockPrice(querySymbol);
+            const realData = await fetchStockPrice(querySymbol, exchange);
             if (realData) {
                 setStock(prev => {
                     if (!prev) return undefined; // Should not happen given check above
