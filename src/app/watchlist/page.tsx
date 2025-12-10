@@ -28,10 +28,10 @@ export default function WatchlistPage() {
             // We fetch in parallel but might need to be careful.
             const updatedDataPromises = data.map(async (stock) => {
                 let querySymbol = stock.symbol;
-                if (stock.symbol === "RELIANCE") querySymbol = "RELIANCE.NS";
-                if (stock.symbol === "TCS") querySymbol = "TCS.NS";
-                if (stock.symbol === "HDFCBANK") querySymbol = "HDFCBANK.NS";
-                if (stock.symbol === "INFY") querySymbol = "INFY.NS";
+                // Generalize mapping: If exchange is NSE and doesn't already have extension
+                if (stock.exchange === "NSE" && !querySymbol.endsWith(".NS")) {
+                    querySymbol = `${stock.symbol}.NS`;
+                }
 
                 // Fallback to mock if API fails
                 try {
