@@ -14,13 +14,14 @@ Built with **Next.js 14**, **Firebase**, and **Real-Time APIs**, Stockify reimag
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/) & [Shadcn UI](https://ui.shadcn.com/)
 - **Animations:** [Framer Motion](https://www.framer.com/motion/) (Swipe Gestures)
 - **Backend (Serverless):** [Firebase](https://firebase.google.com/) (Auth, Firestore)
-- **Data Provider:** [Finnhub API](https://finnhub.io/) (Real-time Pricing)
+- **Data Provider:** [Twelve Data API](https://twelvedata.com/) (Real-time Pricing for US Stocks) & [Mock Data Strategy](https://github.com/abhishek-saha19/Stockify) (Indian Stocks)
 
 ## ✨ Key Features
 
 ### 1. Hybrid Data Architecture ⚡
-- **Instant Search:** Uses a local, optimized directory cache for "Market Overview" and "Search" to ensure **0ms latency** and preserve API rate limits.
-- **Live Pricing:** Dynamically fetches real-time data from Finnhub *only* for the user's specific watchlist.
+- **Instant Search:** Uses a local, optimized directory cache for "Market Overview" and "Search" to ensure **0ms latency**.
+- **Live Pricing:** Dynamically fetches real-time data from **Twelve Data** for US Stocks (e.g., Apple, Tesla).
+- **Graceful Fallback:** Uses high-fidelity mock data for Indian Stocks to bypass API paywalls while maintaining a production-like experience.
 
 ### 2. "Tinder for Stocks" Discovery 🃏
 - Interactive swipe card interface (`SwipeableCard.tsx`) using `framer-motion`.
@@ -31,6 +32,7 @@ Built with **Next.js 14**, **Firebase**, and **Real-Time APIs**, Stockify reimag
 - Persisted across devices using **Cloud Firestore**.
 - Optimistic UI updates for instant feedback.
 - Sort by Price, Change %, or Name.
+- **Smart Currency Display:** Automatically shows `$` for US stocks and `₹` for Indian stocks.
 
 ### 4. Secure Authentication 🔐
 - Fully implemented Email/Password flow using **Firebase Auth**.
@@ -41,7 +43,7 @@ Built with **Next.js 14**, **Firebase**, and **Real-Time APIs**, Stockify reimag
 ### Prerequisites
 - Node.js 18+
 - A Firebase Project
-- A Finnhub API Key (Free Tier)
+- A Twelve Data API Key (Free Tier)
 
 ### Installation
 
@@ -67,8 +69,8 @@ Built with **Next.js 14**, **Firebase**, and **Real-Time APIs**, Stockify reimag
    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
    NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
    
-   # Finnhub API (Real-time Data)
-   NEXT_PUBLIC_FINNHUB_API_KEY=your_finnhub_key
+   # Twelve Data API (Real-time Data for US Stocks)
+   NEXT_PUBLIC_TWELVE_DATA_API_KEY=your_twelve_data_key
    ```
 
 4. **Run Development Server**

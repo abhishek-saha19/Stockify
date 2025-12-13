@@ -90,7 +90,10 @@ export function SwipeableCard({ stock, onSwipe, interactive = true }: SwipeableC
                     <CardTitle className="text-2xl font-bold leading-tight">{stock.symbol}</CardTitle>
                     <CardDescription className="text-sm">{stock.name}</CardDescription>
                     <div className="flex justify-center items-baseline gap-2 mt-1">
-                        <span className="text-2xl font-bold">₹{stock.price}</span>
+                        <span className="text-2xl font-bold">
+                            {(stock.exchange === "NASDAQ" || stock.exchange === "NYSE") ? "$" : "₹"}
+                            {stock.price}
+                        </span>
                         <span className={cn("text-sm font-medium flex items-center", isPositive ? "text-green-500" : "text-red-500")}>
                             {isPositive ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
                             {Math.abs(stock.changePercent)}%

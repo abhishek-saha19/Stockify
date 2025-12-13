@@ -31,6 +31,13 @@ export default function WatchlistPage() {
                 // so we don't need to append .NS anymore
                 const querySymbol = stock.symbol;
 
+                // Only fetch real-time data for US Stocks (FREE Plan Limitation)
+                const isUSStock = stock.exchange === "NASDAQ" || stock.exchange === "NYSE";
+
+                if (!isUSStock) {
+                    return stock; // Return mock data for Indian stocks to avoid 403 error
+                }
+
                 // Fallback to mock if API fails
                 try {
                     const { fetchStockPrice } = await import("@/lib/api");

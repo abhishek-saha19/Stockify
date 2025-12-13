@@ -36,7 +36,10 @@ export function WatchlistTable({ stocks, onRemove }: WatchlistTableProps) {
                                     </Link>
                                 </TableCell>
                                 <TableCell>{stock.name}</TableCell>
-                                <TableCell className="text-right">₹{stock.price.toFixed(2)}</TableCell>
+                                <TableCell className="text-right">
+                                    {(stock.exchange === "NASDAQ" || stock.exchange === "NYSE") ? "$" : "₹"}
+                                    {stock.price.toFixed(2)}
+                                </TableCell>
                                 <TableCell className={cn("text-right flex justify-end items-center gap-1", isPositive ? "text-green-500" : "text-red-500")}>
                                     {isPositive ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
                                     {stock.changePercent.toFixed(2)}%

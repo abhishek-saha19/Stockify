@@ -27,6 +27,11 @@ export default function StockDetailsPage() {
             const querySymbol = stock.symbol;
             const exchange = stock.exchange || "NSE";
 
+            // FREE TIER LIMIT: Only fetch for US Stocks
+            if (exchange !== "NASDAQ" && exchange !== "NYSE") {
+                return; // Keep mock data
+            }
+
             const realData = await fetchStockPrice(querySymbol, exchange);
             if (realData) {
                 setStock(prev => {
@@ -68,7 +73,10 @@ export default function StockDetailsPage() {
                     <div>
                         <p className="text-sm text-muted-foreground">{stock.name}</p>
                         <div className="flex items-baseline gap-2 mt-1">
-                            <span className="text-3xl font-bold">₹{stock.price}</span>
+                            <span className="text-3xl font-bold">
+                                {(stock.exchange === "NASDAQ" || stock.exchange === "NYSE") ? "$" : "₹"}
+                                {stock.price}
+                            </span>
                             <span className={cn("text-sm font-medium flex items-center", isPositive ? "text-green-500" : "text-red-500")}>
                                 {isPositive ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
                                 {stock.changePercent}%
@@ -105,8 +113,8 @@ export default function StockDetailsPage() {
                         <Metric label="Market Cap" value={stock.marketCap} />
                         <Metric label="P/E Ratio" value={stock.peRatio.toString()} />
                         <Metric label="Volume" value={stock.volume.toLocaleString()} />
-                        <Metric label="52W High" value={`₹${(stock.price * 1.2).toFixed(2)} `} />
-                        <Metric label="52W Low" value={`₹${(stock.price * 0.8).toFixed(2)} `} />
+                        <Metric label="52W High" value={`${(stock.exchange === "NASDAQ" || stock.exchange === "NYSE") ? "$" : "₹"}${(stock.price * 1.2).toFixed(2)} `} />
+                        <Metric label="52W Low" value={`${(stock.exchange === "NASDAQ" || stock.exchange === "NYSE") ? "$" : "₹"}${(stock.price * 0.8).toFixed(2)} `} />
                         <Metric label="Volatility" value={stock.volatility} />
                     </div>
                 </div>

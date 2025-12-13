@@ -21,7 +21,7 @@ export const fetchStockPrice = async (symbol: string, exchange: string = "NSE"):
         // symbol: TICKER (e.g., RELIANCE)
         // exchange: NSE
         // apikey: ...
-        const response = await fetch(`https://api.twelvedata.com/quote?symbol=${symbol}&exchange=${exchange}&country=India&apikey=${API_KEY}`);
+        const response = await fetch(`https://api.twelvedata.com/quote?symbol=${symbol}&exchange=${exchange}&apikey=${API_KEY}`);
 
         if (!response.ok) {
             console.warn(`[API] Failed to fetch ${symbol}: ${response.status} ${response.statusText}`);
