@@ -1,5 +1,5 @@
 
-const API_KEY = process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY;
+
 
 export interface RealStockData {
     price: number;
@@ -8,20 +8,11 @@ export interface RealStockData {
 }
 
 export const fetchStockPrice = async (symbol: string, exchange: string = "NSE"): Promise<RealStockData | null> => {
-    if (!API_KEY) {
-        console.warn("Twelve Data API Key missing");
-        return null;
-    }
-
     try {
-        const hasKey = !!API_KEY;
-        console.log(`[API] Fetching ${symbol} from Twelve Data`);
+        console.log(`[API] Fetching ${symbol} via secure proxy`);
 
-        // Twelve Data Endpoint
-        // symbol: TICKER (e.g., RELIANCE)
-        // exchange: NSE
-        // apikey: ...
-        const response = await fetch(`https://api.twelvedata.com/quote?symbol=${symbol}&exchange=${exchange}&apikey=${API_KEY}`);
+        // Call our own internal API route (Proxy)
+        const response = await fetch(`/api/price?symbol=${symbol}&exchange=${exchange}`);
 
         if (!response.ok) {
             console.warn(`[API] Failed to fetch ${symbol}: ${response.status} ${response.statusText}`);
